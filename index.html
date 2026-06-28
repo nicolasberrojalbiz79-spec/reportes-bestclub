@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reportes Best Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--lime:#c6ff00}
+*{box-sizing:border-box}
+body{margin:0;background:#000;color:#fff;font-family:'Archivo','Arial Black',sans-serif}
+input,select,textarea,button{font-family:inherit}
+input::placeholder,textarea::placeholder{color:#555}
+select option{background:#000}
+.center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.page{max-width:960px;margin:0 auto;padding:0 16px 80px}
+.hidden{display:none!important}
+.logoMark{width:70px;height:70px;border-radius:18px;background:var(--lime);color:#000;font-weight:900;font-size:30px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px #c6ff0055}
+.logoSmall{width:38px;height:38px;border-radius:10px;background:var(--lime);color:#000;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bigBtn{display:flex;align-items:center;gap:14px;background:var(--lime);color:#000;border:none;border-radius:16px;padding:18px 22px;font-size:18px;font-weight:800;cursor:pointer;width:100%}
+.bigBtn:active{opacity:.85}
+.outlineBtn{display:flex;align-items:center;gap:14px;background:transparent;color:#fff;border:2px solid #333;border-radius:16px;padding:18px 22px;font-size:18px;font-weight:800;cursor:pointer;width:100%}
+.outlineBtn:active{border-color:var(--lime)}
+.linkBtn{background:none;border:none;color:var(--lime);cursor:pointer;font-size:15px;font-weight:700;padding:8px;display:block;width:100%;margin-top:10px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;position:sticky;top:0;background:#000;z-index:10;border-bottom:1px solid #1a1a1a;margin-bottom:8px}
+.headerTitle{font-size:17px;font-weight:800;text-align:center;flex:1}
+.section{background:#0c0c0c;border:1px solid #1c1c1c;border-radius:14px;padding:16px;margin-top:14px}
+.secTitle{color:var(--lime);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.lbl{font-size:12px;opacity:.55;font-weight:600}
+.inp{background:#000;border:1px solid #2a2a2a;border-radius:10px;color:#fff;padding:11px 13px;font-size:16px;outline:none;width:100%}
+.inp:focus{border-color:var(--lime)}
+.totalBox{background:rgba(198,255,0,.07);border:1px solid #c6ff0033;border-radius:10px;padding:10px 13px;margin-bottom:12px;font-size:14px;font-weight:600}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--lime);color:#000;padding:12px 20px;border-radius:12px;font-weight:800;z-index:999;white-space:nowrap;font-size:14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.tab{background:#0c0c0c;border:1px solid #1c1c1c;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px}
+.tab.on{background:var(--lime);color:#000;border-color:var(--lime)}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.kpi{background:#0c0c0c;border:1px solid #1c1c1c;border-radius:12px;padding:14px}
+.kl{font-size:11px;opacity:.55;font-weight:600}
+.kv{font-size:22px;font-weight:900;margin-top:3px}
+.ks{font-size:11px;opacity:.45;margin-top:2px}
+.track{height:6px;background:#1a1a1a;border-radius:4px;margin-top:8px;overflow:hidden}
+.fill{height:100%;border-radius:4px;transition:width .4s}
+.trackBig{position:relative;height:16px;background:#1a1a1a;border-radius:8px;margin:6px 0}
+.fillBig{height:100%;border-radius:8px;transition:width .5s}
+.marker{position:absolute;top:-4px;width:3px;height:24px;background:#fff;border-radius:2px;opacity:.8}
+.alerta{border:1px solid;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;margin-top:8px}
+.empty{background:#0c0c0c;border:1px dashed #2a2a2a;border-radius:12px;padding:24px;text-align:center;opacity:.65;margin-top:14px;font-size:14px}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #161616;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:9px 10px;color:var(--lime);border-bottom:2px solid #c6ff0022;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid #161616;white-space:nowrap}
+.mbox{background:linear-gradient(135deg,rgba(198,255,0,.09),rgba(198,255,0,.02));border:1px solid #c6ff0044;border-radius:16px;padding:18px;margin-top:14px}
+.mmsg{font-size:14px;font-weight:700;margin:12px 0 0;line-height:1.4}
+.mtip{background:rgba(255,212,0,.07);border:1px solid #ffd40033;border-radius:9px;padding:9px 13px;font-size:12px;margin-top:10px;line-height:1.5}
+.mcmp{display:flex;justify-content:space-between;font-size:12px;opacity:.8;margin-top:10px;padding-top:10px;border-top:1px solid #ffffff12}
+.spinner{width:34px;height:34px;border:3px solid #1c1c1c;border-top-color:var(--lime);border-radius:50%;animation:spin 1s linear infinite;margin:30px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fadeUp{animation:fu .4s ease}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="inicio" class="center hidden"></div>
+<div id="login" class="center hidden"></div>
+<div id="app" class="page hidden"></div>
+
+<script>
+var D = {sedes:[],secretarios:[],objetivos:[],reportes:[]};
+var datosListos = false;
+var loginTipo = "sede";
+var sesion = {rol:null, sede:null};
+var adminTab = "dashboard";
+
+var MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+var TURNOS = ["Mañana","Tarde","Noche"];
+var SEDES_DEFAULT = [
+  "CHACABUCO 472 (Nueva Córdoba)",
+  "SAN LORENZO 449 (Nueva Córdoba)",
+  "MONTEVIDEO 362 (Güemes)",
+  "ROSARIO DE SANTA FE 186 (Centro)",
+  "PODESTA COSTA 3236 (Jardín)",
+  "DRAGO 335 (San Fernando)"
+];
+var CAMPOS = {
+  "Facturación":[["efectivo","Efectivo"],["tarjetaCredito","Tarjeta crédito"],["tarjetaDebito","Tarjeta débito"],["transferencia","Transferencia"],["paginaWeb","Página web"],["deudaVieja","Deuda vieja"]],
+  "Caja":[["quedaEnCaja","Queda en caja"],["retiros","Retiros"]],
+  "Movimiento":[["visitantes","Visitantes"],["averiguadoresGenuinos","Averig. genuinos"],["averiguadoresNoGenuinos","Averig. no genuinos"],["nuevos","Nuevos"],["debenRenovar","Deben renovar"],["renovantes","Renovantes"]],
+  "Clases de prueba":[["clasesAgendadas","Agendadas"],["clasesAsistidas","Asistidas"],["clasesVendidas","Vendidas"]],
+  "Planes":[["plan1m","1 mes"],["plan3m","3 meses"],["plan6m","6 meses"],["planAnual","Anual"],["plan1mPile","1m+pile"],["plan3mPile","3m+pile"],["plan6mPile","6m+pile"],["plan12mPile","12m+pile"]],
+  "Remeras":[["remeras","Remeras (total)"]],
+  "Tasa y activos":[["tasaUso","Tasa de uso"],["activos","Activos"]]
+};
+var OBJ_CAMPOS = [
+  ["facturacionMes","Facturación / mes"],["visitantesMes","Visitantes / mes"],
+  ["averiguadoresMes","Averiguadores / mes"],["nuevosMes","Nuevos / mes"],
+  ["renovantesMes","Renovantes / mes"],["clasesAgendadasMes","Clases de prueba agendadas / mes"],
+  ["tasaUso","Tasa de uso (obj.)"],["activos","Activos (obj.)"]
+];
+var OBJ_DIARIOS = [
+  ["facturacionMes","Facturación / día",true],["visitantesMes","Visitantes / día",false],
+  ["averiguadoresMes","Averiguadores / día",false],["nuevosMes","Nuevos / día",false],
+  ["renovantesMes","Renovantes / día",false],["clasesAgendadasMes","Clases agendadas / día",false]
+];
+
+function n(v){var x=Number(String(v==null?"":v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x;}
+function $f(x){return "$"+Number(x||0).toLocaleString("es-AR");}
+function $n(x){return Number(x||0).toLocaleString("es-AR");}
+function el(id){return document.getElementById(id);}
+function show(id){["inicio","login","app"].forEach(function(x){var e=el(x);if(e)e.classList.add("hidden");});var t=el(id);if(t)t.classList.remove("hidden");}
+function toast(msg){var t=document.createElement("div");t.className="toast fadeUp";t.textContent=msg;document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},2500);}
+function fld(label,inner){return '<label class="field"><span class="lbl">'+label+'</span>'+inner+'</label>';}
+function sel(id,opts,selected){return '<select id="'+id+'" class="inp">'+opts.map(function(o){return'<option'+(o===selected?' selected':'')+'>'+o+'</option>';}).join("")+'</select>';}
+function objDe(mes,sede){return D.objetivos.filter(function(o){return o.mes===mes&&o.sede===sede;})[0]||{};}
+function diasDe(mes){var f=D.objetivos.filter(function(o){return o.mes===mes&&n(o.diasHabiles)>0;})[0];return f?n(f.diasHabiles):0;}
+function secresDe(sede){var l=D.secretarios.filter(function(s){return s.sede===sede;}).map(function(s){return s.secretario;});return l.length?l:["Secretario 1","Secretario 2","Secretario 3"];}
+function spin(){return '<div class="spinner"></div>';}
+function hdr(titulo){return '<div class="header"><button class="linkBtn" style="width:auto" onclick="salir()">← Inicio</button><div class="headerTitle">'+titulo+'</div><div class="logoSmall">BC</div></div>';}
+function kpi(label,value,sub,prog){var p=prog===undefined?-1:Math.min(100,Math.round(prog*100));var bar=p<0?"":'<div class="track"><div class="fill" style="width:'+p+'%;background:'+(p>=100?'var(--lime)':p>=50?'#ffd400':'#ff5252')+'"></div></div>';return '<div class="kpi"><div class="kl">'+label+'</div><div class="kv">'+value+'</div>'+(sub?'<div class="ks">'+sub+'</div>':'')+bar+'</div>';}
+
+// API calls — ahora van a /api/* de Vercel, no a Google
+async function apiPost(endpoint, body) {
+  const res = await fetch('/api/' + endpoint, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+async function apiGet(endpoint) {
+  const res = await fetch('/api/' + endpoint);
+  return res.json();
+}
+
+window.onload = function() {
+  renderInicio();
+  show("inicio");
+  cargarDatos();
+};
+
+function cargarDatos() {
+  apiGet('datos').then(function(d) {
+    if(d.ok !== false) {
+      D = d;
+      datosListos = true;
+      if(sesion.rol==="sede" && !el("app").classList.contains("hidden")){try{renderMotiv();renderUlt();}catch(e){}}
+      else if(sesion.rol==="admin" && !el("app").classList.contains("hidden")){try{renderBody();}catch(e){}}
+    }
+  }).catch(function(){});
+}
+
+function renderInicio() {
+  el("inicio").innerHTML='<div class="fadeUp" style="text-align:center;max-width:440px;width:100%">'
+    +'<div class="logoMark">BC</div>'
+    +'<h1 style="font-size:44px;font-weight:900;line-height:.95;margin:0;letter-spacing:-.03em">REPORTES<br><span style="color:var(--lime)">BEST CLUB</span></h1>'
+    +'<p style="opacity:.6;margin-top:14px;font-size:15px">Sistema de carga y estadísticas · 6 sedes</p>'
+    +'<div style="display:grid;gap:14px;margin-top:36px">'
+    +'<button class="bigBtn" onclick="irLogin(\'sede\')"><span style="font-size:24px">🏋️</span><div style="text-align:left"><div style="font-size:20px">SEDE</div><div style="font-size:12px;opacity:.7;font-weight:400">Cargar reporte del día</div></div></button>'
+    +'<button class="outlineBtn" onclick="irLogin(\'admin\')"><span style="font-size:24px">👑</span><div style="text-align:left"><div style="font-size:20px">ADMIN</div><div style="font-size:12px;opacity:.7;font-weight:400">Dashboard · objetivos · todo</div></div></button>'
+    +'</div></div>';
+}
+
+function irLogin(tipo) {
+  loginTipo=tipo;
+  el("login").innerHTML='<div class="fadeUp" style="max-width:360px;width:100%;text-align:center">'
+    +'<div style="font-size:48px">'+(tipo==="admin"?"👑":"🏋️")+'</div>'
+    +'<h2 style="font-size:26px;font-weight:900;margin:10px 0">'+(tipo==="admin"?"Acceso Admin":"Acceso Sede")+'</h2>'
+    +'<input id="lpass" type="password" class="inp" style="text-align:center;margin-top:16px" placeholder="Clave" onkeydown="if(event.key===\'Enter\')doLogin()">'
+    +'<p id="lerr" style="color:#ff5252;font-size:13px;margin-top:8px;min-height:20px"></p>'
+    +'<button class="bigBtn" style="margin-top:8px" onclick="doLogin()">ENTRAR</button>'
+    +'<button class="linkBtn" onclick="show(\'inicio\')">← Volver</button>'
+    +'</div>';
+  show("login");
+  setTimeout(function(){var e=el("lpass");if(e)e.focus();},100);
+}
+
+function doLogin() {
+  var clave=el("lpass").value;
+  if(!clave){el("lerr").textContent="Ingresá la clave";return;}
+  el("lerr").textContent="Verificando…";
+  apiPost('login',{tipo:loginTipo,clave:clave}).then(function(r){
+    if(r.ok){sesion={rol:r.rol,sede:r.sede||null};r.rol==="admin"?renderAdmin():renderSede();}
+    else{el("lerr").textContent=r.msg||"Clave incorrecta";}
+  }).catch(function(){el("lerr").textContent="Error de conexión. Reintentá.";});
+}
+function salir(){sesion={rol:null,sede:null};show("inicio");}
+
+function renderSede() {
+  var sede=sesion.sede,mesNow=MESES[new Date().getMonth()],hoy=new Date().toISOString().slice(0,10),secres=secresDe(sede);
+  var h=hdr(sede.split(" (")[0]);
+  h+='<div class="section"><div class="secTitle">Datos del turno</div><div class="g2">'
+    +fld("Mes",sel("fMes",MESES,mesNow))+fld("Fecha",'<input id="fFecha" type="date" class="inp" value="'+hoy+'">')
+    +fld("Sede",'<input class="inp" value="'+sede+'" disabled style="opacity:.5">')
+    +fld("Secretario/a",sel("fSec",secres))+fld("Turno",sel("fTurno",TURNOS,"Noche"))+'</div></div>';
+  h+='<div id="motivWrap"></div>';
+  Object.keys(CAMPOS).forEach(function(g){
+    h+='<div class="section"><div class="secTitle">'+g+'</div>';
+    if(g==="Facturación")h+='<div class="totalBox">Total: <span id="totFact" style="color:var(--lime);font-weight:800">$0</span></div>';
+    h+='<div class="g3">';
+    CAMPOS[g].forEach(function(c){h+=fld(c[1],'<input id="f_'+c[0]+'" type="number" inputmode="numeric" class="inp" placeholder="0"'+(g==="Facturación"?' oninput="calcTot()"':'')+'>');});
+    h+='</div></div>';
+  });
+  h+='<div class="section"><div class="secTitle">Comentario (opcional)</div><textarea id="fCom" class="inp" style="min-height:65px;resize:vertical" placeholder="Aclaración o motivo de edición…"></textarea></div>';
+  h+='<button class="bigBtn" style="margin-top:14px" onclick="guardarR()">💾 GUARDAR REPORTE</button>';
+  h+='<div id="ultimos"></div>';
+  el("app").innerHTML=h; show("app");
+  setTimeout(function(){var fm=el("fMes");if(fm)fm.onchange=renderMotiv;renderMotiv();renderUlt();},80);
+}
+
+function calcTot(){var t=["efectivo","tarjetaCredito","tarjetaDebito","transferencia","paginaWeb","deudaVieja"].reduce(function(a,k){var e=el("f_"+k);return a+n(e?e.value:0);},0);var e=el("totFact");if(e)e.textContent=$f(t);return t;}
+
+function renderMotiv(){
+  var sede=sesion.sede,fMes=el("fMes"),mes=fMes?fMes.value:MESES[new Date().getMonth()];
+  var obj=objDe(mes,sede),data=D.reportes.filter(function(r){return r.sede===sede&&r.mes===mes;}),dias=diasDe(mes);
+  var wrap=el("motivWrap");if(!wrap)return;
+  if(!data.length){wrap.innerHTML='<div class="mbox"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">🚀</span><div><div style="font-weight:900;font-size:17px">¡Arranquemos el mes!</div><div style="font-size:12px;opacity:.6">'+sede.split(" (")[0]+' · '+mes+'</div></div></div><p class="mmsg">Todavía no hay reportes cargados. Cargá el primero para ver tu progreso. 💪</p></div>';return;}
+  function s(k){return data.reduce(function(a,r){return a+n(r[k]);},0);}
+  var dc=data.length,dr=dias?Math.max(0,dias-dc):0,pm=dias?Math.min(100,Math.round(dc/dias*100)):0;
+  var real={facturacion:s("totalFacturacion"),visitantes:s("visitantes"),averig:s("averiguadoresGenuinos"),nuevos:s("nuevos"),renov:s("renovantes"),clAg:s("clasesAgendadas"),clAs:s("clasesAsistidas"),clV:s("clasesVendidas")};
+  var objM={facturacion:n(obj.facturacionMes),visitantes:n(obj.visitantesMes),averig:n(obj.averiguadoresMes),nuevos:n(obj.nuevosMes),renov:n(obj.renovantesMes),clAg:n(obj.clasesAgendadasMes)};
+  var tA=real.clAg?real.clAs/real.clAg:0.80,tV=real.clAs?real.clV/real.clAs:0.50;
+  objM.clAs=Math.round(objM.clAg*tA);objM.clV=Math.round(objM.clAg*tA*tV);
+  var claves=["facturacion","visitantes","averig","nuevos","renov","clAg"];
+  var avg=Math.round(claves.reduce(function(a,k){return a+Math.min(100,objM[k]?(real[k]/objM[k])*100:0);},0)/claves.length);
+  var fr,eg;
+  if(avg>=100){fr="¡OBJETIVO CUMPLIDO! Son una máquina. 🏆";eg="🏆";}
+  else if(avg>=pm+10){fr="¡Van adelantados al calendario! Siguen así y la rompen. 🔥";eg="🔥";}
+  else if(avg>=pm-10){fr="Van en el ritmo justo. Mantengan el envión. 💪";eg="💪";}
+  else{fr="Hay que apretar el acelerador. ¡Vamos que se puede! ⚡";eg="⚡";}
+  var cg=avg>=100?'var(--lime)':(avg>=pm?'#9eff00':(avg>=pm-15?'#ffd400':'#ff7043'));
+  function aviso(key,label,isMoney,emoji){
+    var r=real[key],om=objM[key];if(!om)return'';
+    var pct=Math.min(100,Math.round(r/om*100));
+    var col=pct>=100?'var(--lime)':(pct>=pm?'#9eff00':(pct>=pm-15?'#ffd400':'#ff7043'));
+    var fM=Math.max(0,om-r),nD=dr>0&&fM>0?Math.ceil(fM/dr):0;
+    var deb=dias?Math.round(dc/dias*om):0,dif=r-deb;
+    var msg=pct>=100?'✅ <b>¡Objetivo del mes cumplido!</b>':(dif>=0&&dr>0?'🔥 <b>Vas adelantado.</b> Necesitás '+(isMoney?$f(nD):$n(nD))+'/día para cerrar en el objetivo.':(dr>0?'⚡ <b>Estás '+(isMoney?$f(Math.abs(dif)):$n(Math.abs(dif)))+' por debajo del ritmo.</b> Necesitás '+(isMoney?$f(nD):$n(nD))+'/día.':'📊 El mes cerró al '+pct+'% del objetivo.'));
+    var tip='';
+    if(dr>0&&pct<100){
+      if(key==='clAg')tip='💡 Agendá <b>'+Math.max(1,Math.ceil(fM/dr))+'</b> clase'+(Math.ceil(fM/dr)>1?'s':'')+' de prueba más por día.';
+      else if(key==='clAs'){var pa=real.clAg?Math.round(real.clAs/real.clAg*100):0;tip='💡 Tasa de asistencia: <b>'+pa+'%</b>. '+(pa>=80?'¡Bien!':'Confirmá turnos con anticipación.');}
+      else if(key==='clV'){var pc=real.clAs?Math.round(real.clV/real.clAs*100):0;tip='💡 Conversión clase→venta: <b>'+pc+'%</b>. '+(pc>=60?'¡Excelente!':'Trabajá el cierre en cada clase.');}
+      else if(key==='visitantes')tip='💡 Necesitás <b>'+Math.max(1,nD)+'</b> visitante'+(nD>1?'s':'')+' más por día.';
+      else if(key==='averig')tip='💡 Cada averiguador bien atendido hoy puede ser el nuevo de mañana.';
+      else if(key==='nuevos'){var ca=real.averig?Math.round(real.nuevos/real.averig*100):0;tip='💡 Conversión averig→nuevo: <b>'+ca+'%</b>. '+(ca>=30?'¡Arriba!':'Enfocate en cerrar al momento de la consulta.');}
+      else if(key==='renov')tip='💡 Revisá socios que vencen esta semana. Un llamado a tiempo = una renovación.';
+      else if(key==='facturacion')tip='💡 Necesitás facturar <b>'+$f(nD)+'</b>/día en los '+dr+' días restantes.';
+    }
+    return '<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:5px"><span>'+emoji+' '+label+'</span><span style="color:'+col+'">'+(isMoney?$f(r):$n(r))+' / '+(isMoney?$f(om):$n(om))+' · '+pct+'%</span></div><div class="trackBig"><div class="fillBig" style="width:'+pct+'%;background:'+col+'"></div>'+(dias?'<div class="marker" style="left:'+pm+'%"></div>':'')+'</div><div style="font-size:11px;opacity:.45;margin-top:3px">Obj. mes: '+(isMoney?$f(om):$n(om))+(dias&&dr>0?' · Necesitás: '+(isMoney?$f(nD):$n(nD))+'/día':'')+' · Quedan '+dr+' días</div><div style="font-size:12px;line-height:1.5;color:#ccc;margin-top:4px">'+msg+'</div>'+(tip?'<div class="mtip">'+tip+'</div>':'')+'</div>';
+  }
+  var h='<div class="mbox"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">'+eg+'</span><div style="flex:1"><div style="font-weight:900;font-size:17px">Tu progreso del mes</div><div style="font-size:12px;opacity:.6">'+sede.split(" (")[0]+' · '+mes+(dias?' · día '+dc+' de '+dias+' hábiles · '+dr+' restantes':'')+'</div></div><div style="font-size:26px;font-weight:900;color:var(--lime)">'+avg+'%</div></div><p class="mmsg">'+fr+'</p><div style="margin:12px 0"><div style="display:flex;justify-content:space-between;font-size:11px;opacity:.65;margin-bottom:4px"><span>Avance general</span><span>'+avg+'% de la meta</span></div><div class="trackBig"><div class="fillBig" style="width:'+avg+'%;background:'+cg+'"></div>'+(dias?'<div class="marker" style="left:'+pm+'%"></div>':'')+'</div>'+(dias?'<div class="mcmp"><span>📅 Mes transcurrido: <b style="color:#fff">'+pm+'%</b></span><span>🎯 Su avance: <b style="color:'+(avg>=pm?'var(--lime)':'#ffd400')+'">'+avg+'%</b></span></div>':'')+'</div><div style="border-top:1px solid #222;margin:14px 0"></div>'+aviso('facturacion','Facturación',true,'💰')+aviso('visitantes','Visitantes',false,'👀')+aviso('averig','Averiguadores genuinos',false,'🔎')+aviso('nuevos','Nuevos',false,'🆕')+aviso('renov','Renovantes',false,'🔄')+aviso('clAg','Clases de prueba agendadas',false,'📅')+aviso('clAs','Clases asistidas (est.)',false,'🎽')+aviso('clV','Clases vendidas (est.)',false,'✅')+'</div>';
+  wrap.innerHTML=h;
+}
+
+function renderUlt(){var data=D.reportes.filter(function(r){return r.sede===sesion.sede;}).slice(-5).reverse();var w=el("ultimos");if(!w)return;if(!data.length){w.innerHTML='';return;}var h='<div class="section"><div class="secTitle">Últimos reportes cargados</div>';data.forEach(function(r){h+='<div class="mrow"><span>'+r.fecha+' · '+r.turno+'</span><span style="color:var(--lime);font-weight:800">'+$f(r.totalFacturacion)+'</span></div>';});w.innerHTML=h+'</div>';}
+
+function guardarR(){
+  var data={sede:sesion.sede,mes:el("fMes").value,fecha:el("fFecha").value,secretario:el("fSec").value,turno:el("fTurno").value,comentario:el("fCom").value};
+  Object.keys(CAMPOS).forEach(function(g){CAMPOS[g].forEach(function(c){var e=el("f_"+c[0]);data[c[0]]=n(e?e.value:0);});});
+  data.totalFacturacion=calcTot();
+  var btn=event.currentTarget;btn.disabled=true;btn.textContent="Guardando…";
+  apiPost('guardar',{accion:'guardarReporte',data:data}).then(function(res){
+    if(res.ok){data.id=res.id;data.timestamp=new Date().toISOString();D.reportes.push(data);toast("✅ Reporte guardado");renderSede();}
+    else{btn.disabled=false;btn.textContent="💾 GUARDAR REPORTE";toast("⚠️ Error: "+(res.msg||"intentá de nuevo"));}
+  }).catch(function(){btn.disabled=false;btn.textContent="💾 GUARDAR REPORTE";toast("⚠️ Error de conexión");});
+}
+
+function renderAdmin(){
+  el("app").innerHTML=hdr("Panel Admin 👑")+'<div class="tabs"><button class="tab'+(adminTab==="dashboard"?" on":"")+'" onclick="setTab(\'dashboard\')">📊 Dashboard</button><button class="tab'+(adminTab==="objetivos"?" on":"")+'" onclick="setTab(\'objetivos\')">🎯 Objetivos</button><button class="tab'+(adminTab==="historico"?" on":"")+'" onclick="setTab(\'historico\')">📁 Histórico</button><button class="tab'+(adminTab==="secres"?" on":"")+'" onclick="setTab(\'secres\')">👥 Secretarios</button></div><div id="body">'+spin()+'</div>';
+  show("app");setTimeout(renderBody,80);
+}
+function setTab(t){adminTab=t;renderAdmin();}
+function renderBody(){var b=el("body");if(!b)return;if(adminTab==="dashboard")renderDash(b);else if(adminTab==="objetivos")renderObjs(b);else if(adminTab==="historico")renderHist(b);else renderSecres(b);}
+
+function renderDash(b){
+  var sf=window._sf||"Todas";
+  b.innerHTML=fld("Ver sede",sel("dSede",["Todas"].concat(D.sedes.length?D.sedes:SEDES_DEFAULT),sf))+'<div id="dc">'+spin()+'</div>';
+  setTimeout(function(){var ds=el("dSede");if(ds)ds.onchange=function(){window._sf=this.value;var dc=el("dc");if(dc){dc.innerHTML=spin();setTimeout(function(){buildDash(el("dc"));},40);}};buildDash(el("dc"));},40);
+}
+function buildDash(cont){
+  if(!cont)return;
+  var sf=window._sf||"Todas",data=sf==="Todas"?D.reportes:D.reportes.filter(function(r){return r.sede===sf;});
+  if(!data.length){cont.innerHTML='<div class="empty">Todavía no hay reportes. Entrá como <b>Sede</b> y cargá uno.</div>';return;}
+  function s(k){return data.reduce(function(a,r){return a+n(r[k]);},0);}
+  var mesR=data[data.length-1].mes,dias=diasDe(mesR);
+  var obj=sf==="Todas"?function(){var o={},om=D.objetivos.filter(function(x){return x.mes===mesR;});["facturacionMes","visitantesMes","averiguadoresMes","nuevosMes","renovantesMes","clasesAgendadasMes","tasaUso","activos"].forEach(function(k){o[k]=om.reduce(function(a,x){return a+n(x[k]);},0);});return o;}():objDe(mesR,sf);
+  var tF=s("totalFacturacion"),vs=s("visitantes"),av=s("averiguadoresGenuinos"),nv=s("nuevos"),rn=s("renovantes"),cA=s("clasesAgendadas"),cAs=s("clasesAsistidas"),cV=s("clasesVendidas"),ul=data[data.length-1],act=n(ul.activos),tU=n(ul.tasaUso);
+  var h="";
+  var als=[];
+  if(n(obj.nuevosMes)){var p=Math.round(nv/n(obj.nuevosMes)*100);als.push([p<50?"rojo":"amarillo","Nuevos del mes: "+nv+"/"+obj.nuevosMes+" — "+p+"%"]);}
+  if(n(obj.renovantesMes)&&rn>=n(obj.renovantesMes))als.push(["verde","Renovantes superaron el objetivo ✅ ("+rn+"/"+obj.renovantesMes+")"]);
+  if(n(obj.tasaUso)&&tU<n(obj.tasaUso))als.push(["rojo","Tasa de uso: "+tU+"/"+obj.tasaUso+" — por debajo"]);
+  als.forEach(function(a){var c=a[0]==="rojo"?"border-color:#ff5252;background:rgba(255,82,82,.07)":a[0]==="amarillo"?"border-color:#ffd400;background:rgba(255,212,0,.07)":"border-color:var(--lime);background:rgba(198,255,0,.07)";h+='<div class="alerta" style="'+c+'">'+(a[0]==="rojo"?"🔴":a[0]==="amarillo"?"🟡":"🟢")+' '+a[1]+'</div>';});
+  h+='<div class="kgrid">'+kpi("Facturación mes",$f(tF),"Obj. "+$f(n(obj.facturacionMes)),n(obj.facturacionMes)?tF/n(obj.facturacionMes):undefined)+kpi("Visitantes",$n(vs),"Obj. "+(obj.visitantesMes||"-"),n(obj.visitantesMes)?vs/n(obj.visitantesMes):undefined)+kpi("Averiguadores gen.",$n(av),"Obj. "+(obj.averiguadoresMes||"-"),n(obj.averiguadoresMes)?av/n(obj.averiguadoresMes):undefined)+kpi("Nuevos",$n(nv),"Obj. "+(obj.nuevosMes||"-"),n(obj.nuevosMes)?nv/n(obj.nuevosMes):undefined)+kpi("Renovantes",$n(rn),"Obj. "+(obj.renovantesMes||"-"),n(obj.renovantesMes)?rn/n(obj.renovantesMes):undefined)+kpi("Clases agendadas",$n(cA),"Obj. "+(obj.clasesAgendadasMes||"-"),n(obj.clasesAgendadasMes)?cA/n(obj.clasesAgendadasMes):undefined)+kpi("Clases asistidas",$n(cAs),"Resultado real")+kpi("Clases vendidas",$n(cV),"Conv. "+(cAs?Math.round(cV/cAs*100):0)+"%")+kpi("Activos",$n(act),"Obj. "+(obj.activos||"-"),n(obj.activos)?act/n(obj.activos):undefined)+kpi("Tasa de uso",$n(tU),"Obj. "+(obj.tasaUso||"-"),n(obj.tasaUso)?tU/n(obj.tasaUso):undefined)+'</div>';
+  if(dias>0){var d=function(m){return Math.round(n(m)/dias);};h+='<div class="section"><div class="secTitle">Objetivo diario (÷ '+dias+' días hábiles)</div><div class="kgrid">'+kpi("Facturación/día",$f(d(obj.facturacionMes)))+kpi("Visitantes/día",$n(d(obj.visitantesMes)))+kpi("Averiguadores/día",$n(d(obj.averiguadoresMes)))+kpi("Nuevos/día",$n(d(obj.nuevosMes)))+kpi("Renovantes/día",$n(d(obj.renovantesMes)))+kpi("Clases/día",$n(d(obj.clasesAgendadasMes)))+'</div></div>';}
+  h+='<div class="section"><div class="secTitle">Métricas calculadas</div><div class="kgrid">'+kpi("Conv. visita→nuevo",(vs?Math.round(nv/vs*100):0)+"%")+kpi("Conv. averig→nuevo",(av?Math.round(nv/av*100):0)+"%")+kpi("Ticket promedio",$f((nv+rn)?Math.round(tF/(nv+rn)):0))+kpi("Reportes cargados",$n(data.length))+'</div></div>';
+  var serie=data.map(function(r){return n(r.totalFacturacion);}),mx=Math.max.apply(null,serie.concat([1]));
+  h+='<div class="section"><div class="secTitle">Facturación por reporte</div><div style="display:flex;align-items:flex-end;gap:4px;height:90px;margin-top:8px">';
+  serie.forEach(function(v){h+='<div title="'+$f(v)+'" style="flex:1;min-width:5px;background:var(--lime);border-radius:3px 3px 0 0;height:'+Math.max(4,(v/mx)*100)+'%"></div>';});
+  cont.innerHTML=h+'</div></div>';
+}
+
+function renderObjs(b){
+  var ms=window._om||MESES[new Date().getMonth()],sd=window._os||(D.sedes.length?D.sedes[0]:SEDES_DEFAULT[0]),ex=objDe(ms,sd),dh=diasDe(ms);
+  var h='<p style="opacity:.65;font-size:13px;margin-top:8px">Elegí mes y sede. Cargá los objetivos mensuales y los días hábiles. El diario se calcula solo.</p>';
+  h+='<div class="g3">'+fld("Mes",sel("oMes",MESES,ms))+fld("Sede",sel("oSede",D.sedes.length?D.sedes:SEDES_DEFAULT,sd))+fld("Días hábiles",'<input id="oDias" type="number" class="inp" value="'+(dh||"")+'" placeholder="ej. 22" oninput="prevDia()">')+'</div>';
+  h+='<div class="section"><div class="secTitle">Objetivos mensuales — '+sd.split(" (")[0]+'</div><div class="g3">';
+  OBJ_CAMPOS.forEach(function(c){h+=fld(c[1],'<input id="o_'+c[0]+'" type="number" class="inp" value="'+(ex[c[0]]!==undefined&&ex[c[0]]!==""?ex[c[0]]:"")+'" oninput="prevDia()">');});
+  h+='</div></div><div class="section"><div class="secTitle">Objetivo diario calculado</div><div id="prevBox" class="kgrid"></div></div>';
+  h+='<button class="bigBtn" style="margin-top:14px" onclick="guardarObjs()">🎯 GUARDAR OBJETIVOS DE ESTA SEDE</button>';
+  b.innerHTML=h;
+  el("oMes").onchange=function(){window._om=this.value;renderObjs(el("body"));};
+  el("oSede").onchange=function(){window._os=this.value;renderObjs(el("body"));};
+  prevDia();
+}
+function prevDia(){var d=n(el("oDias")?el("oDias").value:0),pb=el("prevBox");if(!pb)return;if(!d){pb.innerHTML='<div style="opacity:.55;font-size:13px;padding:8px">Ingresá los días hábiles para ver el objetivo diario.</div>';return;}var h="";OBJ_DIARIOS.forEach(function(c){var m=n(el("o_"+c[0])?el("o_"+c[0]).value:0),dia=Math.round(m/d);h+=kpi(c[1],c[2]?$f(dia):$n(dia),"Mensual "+(c[2]?$f(m):$n(m)));});pb.innerHTML=h;}
+function guardarObjs(){
+  var obj={mes:el("oMes").value,sede:el("oSede").value,diasHabiles:n(el("oDias").value)};
+  OBJ_CAMPOS.forEach(function(c){obj[c[0]]=n(el("o_"+c[0])?el("o_"+c[0]).value:0);});
+  var btn=event.currentTarget;btn.disabled=true;btn.textContent="Guardando…";
+  apiPost('guardar',{accion:'guardarObjetivos',data:obj}).then(function(r){
+    if(r.ok){D.objetivos=D.objetivos.filter(function(o){return!(o.mes===obj.mes&&o.sede===obj.sede);});D.objetivos.push(obj);D.objetivos.forEach(function(o){if(o.mes===obj.mes)o.diasHabiles=obj.diasHabiles;});toast("✅ Objetivos guardados");btn.disabled=false;btn.textContent="🎯 GUARDAR OBJETIVOS DE ESTA SEDE";}
+    else{btn.disabled=false;btn.textContent="🎯 GUARDAR OBJETIVOS DE ESTA SEDE";toast("⚠️ "+(r.msg||"error"));}
+  }).catch(function(){btn.disabled=false;btn.textContent="🎯 GUARDAR OBJETIVOS DE ESTA SEDE";toast("⚠️ Error de conexión");});
+}
+
+function renderHist(b){
+  var data=D.reportes.slice().reverse();
+  if(!data.length){b.innerHTML='<div class="empty">Sin reportes aún.</div>';return;}
+  var h='<div style="overflow-x:auto;margin-top:12px"><table><thead><tr>'+["Fecha","Sede","Secre","Turno","Facturación","Visit.","Nuevos","Renov.","Comentario"].map(function(x){return'<th>'+x+'</th>';}).join("")+'</tr></thead><tbody>';
+  data.forEach(function(r){h+='<tr><td>'+r.fecha+'</td><td>'+String(r.sede||"").split(" (")[0]+'</td><td>'+(r.secretario||"")+'</td><td>'+(r.turno||"")+'</td><td style="color:var(--lime);font-weight:800">'+$f(r.totalFacturacion)+'</td><td>'+$n(n(r.visitantes))+'</td><td>'+$n(n(r.nuevos))+'</td><td>'+$n(n(r.renovantes))+'</td><td style="font-size:11px;opacity:.6;max-width:120px;white-space:normal">'+(r.comentario||"")+'</td></tr>';});
+  b.innerHTML=h+'</tbody></table></div>';
+}
+
+function renderSecres(b){
+  var sedes=D.sedes.length?D.sedes:SEDES_DEFAULT;
+  var h='<p style="opacity:.65;font-size:13px;margin-top:8px">Un nombre por línea en cada sede.</p>';
+  sedes.forEach(function(sede,i){var lista=secresDe(sede).join("\n");h+='<div class="section"><div class="secTitle">'+sede.split(" (")[0]+'</div><textarea id="sec_'+i+'" class="inp" style="min-height:80px;resize:vertical">'+lista+'</textarea></div>';});
+  h+='<button class="bigBtn" style="margin-top:14px" onclick="guardarSecres()">👥 GUARDAR SECRETARIOS</button>';
+  b.innerHTML=h;
+}
+function guardarSecres(){
+  var sedes=D.sedes.length?D.sedes:SEDES_DEFAULT,lista=[];
+  sedes.forEach(function(sede,i){var e=el("sec_"+i);if(!e)return;e.value.split("\n").map(function(x){return x.trim();}).filter(Boolean).forEach(function(nm){lista.push({sede:sede,secretario:nm});});});
+  var btn=event.currentTarget;btn.disabled=true;btn.textContent="Guardando…";
+  apiPost('guardar',{accion:'guardarSecretarios',data:lista}).then(function(r){
+    if(r.ok){D.secretarios=lista;toast("✅ Secretarios guardados");btn.disabled=false;btn.textContent="👥 GUARDAR SECRETARIOS";}
+    else{btn.disabled=false;btn.textContent="👥 GUARDAR SECRETARIOS";toast("⚠️ "+(r.msg||"error"));}
+  }).catch(function(){btn.disabled=false;btn.textContent="👥 GUARDAR SECRETARIOS";toast("⚠️ Error de conexión");});
+}
+</script>
+</body>
+</html>
